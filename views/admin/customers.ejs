@@ -1,0 +1,79 @@
+<div class="w-full min-h-screen bg-[#F5E9DA] p-6">
+
+    <!-- PAGE TITLE -->
+    <h1 class="text-2xl font-bold text-[#2c2c2c]">User Management</h1>
+    <p class="text-sm text-gray-600 mt-1">
+        Manage registered customers and their order history.
+    </p>
+
+    <!-- SEARCH + FILTERS -->
+    <div class="flex items-center justify-between mt-6">
+
+        <!-- Search -->
+        <input 
+            type="text"
+            placeholder="Search by name or email..."
+            class="w-80 px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm"
+        />
+
+        <!-- Filter Button -->
+        <button class="px-4 py-2 bg-[#C8A97E] text-white rounded-lg shadow hover:shadow-md">
+            Apply Filters
+        </button>
+    </div>
+
+    <!-- USER TABLE -->
+    <div class="mt-6 bg-white shadow rounded-lg overflow-hidden">
+
+        <!-- Table Head -->
+        <div class="bg-[#F5E9DA] grid grid-cols-7 text-xs font-bold text-gray-700 py-3 px-4">
+            <div>User ID</div>
+            <div>Name</div>
+            <div>Email</div>
+            <div class="col-span-2">Joined Date</div>
+            <div>Orders</div>
+            <div>Status</div>
+        </div>
+
+        <!-- User Rows -->
+        <% users.forEach((user) => { %>
+            <div class="grid grid-cols-7 py-4 px-4 border-b border-gray-100 text-sm">
+
+                <div class="text-gray-700 font-medium">#<%= user.userId %></div>
+
+                <div class="text-gray-700">
+                    <%= user.firstName %> <%= user.lastName %>
+                </div>
+
+                <div class="text-gray-600"><%= user.email %></div>
+
+                <div class="col-span-2 text-gray-600">
+                    <%= user.joinedDate %>
+                </div>
+
+                <div class="text-gray-700">
+                    <%= user.orderCount %>
+                </div>
+
+                <!-- Status Badge -->
+                <div>
+                    <% if (user.status === "Active") { %>
+                        <span class="px-3 py-1 text-xs bg-green-500 text-white rounded-full">
+                            Active
+                        </span>
+                    <% } else if (user.status === "Inactive") { %>
+                        <span class="px-3 py-1 text-xs bg-gray-400 text-white rounded-full">
+                            Inactive
+                        </span>
+                    <% } else if (user.status === "Banned") { %>
+                        <span class="px-3 py-1 text-xs bg-red-500 text-white rounded-full">
+                            Banned
+                        </span>
+                    <% } %>
+                </div>
+
+            </div>
+        <% }) %>
+
+    </div>
+</div>
