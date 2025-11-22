@@ -14,9 +14,4 @@
             }
         });
     });
-    //for testing =>
-    function verifyOTP(){
-        let otp = "";
-        inputs.forEach((input)=>otp+=input.value);
-        alert("otp entered:"+otp)
-    }
+

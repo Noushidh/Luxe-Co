@@ -9,7 +9,6 @@
     <!-- Notyf -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-
 </head>
 
 <body>
@@ -54,7 +53,7 @@
                                         <p class="email-address">Please enter it below to verify yout account</p>
                                     </div>
 
-                                    <form class="form">
+                                    <form class="form" onsubmit="return verifyOTP(event)">
                                         <div class="otp-input-group">
                                             <input type="text" class="otp-input" maxlength="1" id="otp-1" required>
                                             <input type="text" class="otp-input" maxlength="1" id="otp-2" required>
@@ -64,7 +63,7 @@
                                             <input type="text" class="otp-input" maxlength="1" id="otp-6" required>
                                         </div>
 
-                                        <button type="submit" class="button" onclick="verifyOTP()">
+                                        <button type="submit" class="button">
                                             <div class="text-wrapper-6">Verify Code</div>
                                         </button>
                                     </form>
@@ -84,6 +83,37 @@
                 </div>
             </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/script/userjs/otp.js"></script>
 
+<script>
+function verifyOTP(event) {
+    event.preventDefault();
+let otp = "";
+    for (let i = 1; i <= 6; i++) {
+        otp += document.getElementById("otp-" + i).value;
+    }
+
+ axios.post("/otp", { otp })
+        .then((response) => {
+            if (response.data.success) {
+
+                notyf.success("OTP Verified Successfully");
+
+                setTimeout(() => {
+                    window.location.href = response.data.redirect;
+                }, 1500);
+
+            } else {
+
+                notyf.error(response.data.message);
+
+            }
+        })
+        .catch(() => {
+            notyf.error("Invalid OTP. Please try again");
+        });
+}
+</script>
 </html>

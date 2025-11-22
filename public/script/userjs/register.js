@@ -31,7 +31,7 @@ window.togglePassword=function togglePassword(button) {
         }
 
 
-    import { validateEmail,validatePassword,showError,clearError,PasswordMatch} from "/util/util.js"
+    import { validateEmail,validatePassword,showError,clearError,PasswordMatch} from "/utils/validation.js"
   document.addEventListener("DOMContentLoaded", function () {
   const RegisterForm = document.getElementById("RegisterForm");
   const emailInput = document.getElementById("email");

@@ -5,6 +5,7 @@ const app = express();
 const connectDB = require('./db/connectDB')
 const session = require('express-session')
 const flash = require('connect-flash');
+const nocache = require('nocache');
 
 const port = process.env.PORT||5000;
 const SESSION_SECRET = process.env.SESSION_SECRET;
@@ -13,12 +14,15 @@ app.set('views',path.join(__dirname,'views'))
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(nocache())
 
 app.use(session({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
+        secure:false,
+        httpOnly:true,
         maxAge: 1000 * 60 * 60
     }
 }))

@@ -20,7 +20,7 @@ router
 
 router
 .route('/otp')
-.get(usercontroller.otp)
-
+.get(usercontroller.load_otp)
+.post(usercontroller.Verifyotp)
 module.exports=router;
 

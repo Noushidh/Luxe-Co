@@ -12,7 +12,7 @@
     }
 
 
-import { validateEmail,validatePassword,showError,clearError} from "/util/util.js"
+import { validateEmail,validatePassword,showError,clearError} from "/utils/validation.js"
   document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
   const emailInput = document.getElementById("email");

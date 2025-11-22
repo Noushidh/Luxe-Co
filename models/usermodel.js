@@ -1,7 +1,7 @@
+
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-
   fullname: {
     type: String,
     required: true,
@@ -16,11 +16,25 @@ const userSchema = new mongoose.Schema({
   password_hash: {
     type: String,
     required: true
-  }
-}, {
-  timestamps: true // auto-creates created_at & updated_at
-});
+  },
+  status: {
+    type: String,
+    enum: ["Active", "Inactive", "Banned"],
+    default: "Active"
+  },
 
-const user = mongoose.model('user', userSchema);
-module.exports = user;
-//export to user controller
+  // 🔥 NEW FIELDS YOU NEED FOR TEMP STORAGE + OTP
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  otp: {
+    type: String
+  },
+  otpExpires: {
+    type: Date
+  }
+
+}, { timestamps: true });
+
+module.exports = mongoose.model('User', userSchema);
