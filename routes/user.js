@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const usercontroller = require('../controller/usercontroller/user.auth');
-const { route } = require('./admin');
 
 router
 .route('/login')
@@ -22,5 +21,7 @@ router
 .route('/otp')
 .get(usercontroller.load_otp)
 .post(usercontroller.Verifyotp)
+
+router.post('/user/resend-otp',usercontroller.resendOTP)
 module.exports=router;
 

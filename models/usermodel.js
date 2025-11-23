@@ -23,8 +23,7 @@ const userSchema = new mongoose.Schema({
     default: "Active"
   },
 
-  // 🔥 NEW FIELDS YOU NEED FOR TEMP STORAGE + OTP
-  isVerified: {
+isVerified: {
     type: Boolean,
     default: false
   },

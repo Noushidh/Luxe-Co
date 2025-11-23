@@ -2,7 +2,7 @@ const User = require('../../models/usermodel');
 const bcrypt = require('bcryptjs');
 const saltround = 10;
 
-const sendverificationEmai = require('../../config/nodemailer');
+const sendverificationEmail = require('../../config/nodemailer');
 const { generateOtp } = require("../../public/utils/otp");
 
 const loadlogin = (req, res) => {
@@ -35,7 +35,7 @@ const register = async (req, res, next) => {
             return res.redirect('/user/register')
         }
         const otp = generateOtp();
-        const emailSent = await sendverificationEmai(email, otp)
+        const emailSent = await sendverificationEmail(email, otp)
 
         if (!emailSent) {
             req.flash('error', 'Failed to send OTP');
@@ -50,9 +50,11 @@ const register = async (req, res, next) => {
         return res.redirect('/user/otp')
 
     } catch (error) {
+
         console.log("error from register", error)
         req.flash("error", "Registration failed. Please try again.");
         return res.redirect("/user/register");
+
     }
 }
 const login = async (req, res, next) => {
@@ -60,39 +62,55 @@ const login = async (req, res, next) => {
         const { email, password } = req.body;
 
         if (!email || !password) {
+
             req.flash("error", "Please fill all fields");
             return res.redirect("/user/login");
+
         }
+
         const user = await User.findOne({ email });
         if (!user) {
             req.flash('error', 'User does not exist');
             return res.redirect('/user/login')
         }
+
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
             req.flash('error', 'Invalid Credentials');
             return res.redirect('/user/login')
         }
+
         req.session.user = user;
         req.flash("success", "Login successful!");
         return res.redirect("/user/home");
+
     } catch (error) {
-        console.log("error from login")
+
+        console.log("error from login", error)
+
     }
 }
 
 const Verifyotp = async (req, res) => {
     try {
         const { otp } = req.body;
-        console.log("User OTP:", otp);
-        console.log("Session OTP:", req.session.otp);
+
+        //CHECK IF OTP EXPIRED
+        if (!req.session.otp || req.session.otpExpires || Date.now() > req.session.otpExpires) {
+            return res.json({
+                success: false, message: "OTP expired. Please resend a new OTP."
+            });
+        }
+
         if (String(otp) === String(req.session.otp)) {
             const { name, email, password } = req.session.userData
+
             const hashedPassword = await bcrypt.hash(password, saltround);
             const newUser = new User({ fullname: name, email: email, password_hash: hashedPassword, isVerified: true });
             await newUser.save()
 
             req.session.otp = null;
+            req.session.otpExpires = null;
             req.session.userData = null;
 
             req.flash('success', 'User created Successfully');
@@ -103,17 +121,36 @@ const Verifyotp = async (req, res) => {
         }
 
     } catch (error) {
+
         console.log("error from Verifying otp", error);
         req.flash('error', 'Something went wrong');
         return res.json({ success: false, message: "Server error" });
+
     }
 }
 
-module.exports = { loadlogin, loadregister, load_Forgot_Password, load_otp, register, login, Verifyotp }
-//register
-// const hashedPassword = await bcrypt.hash(password, saltround);
-// const newUser = new User({ fullname: name, password_hash: hashedPassword, email: email });
-// await newUser.save()
+const resendOTP = async (req, res) => {
+    try {
+        const { email } = req.session.userData;
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Email not found in Session" })
+        }
+        const otp = generateOtp();
+        req.session.otp = otp;
+        const emailSent = await sendverificationEmail(email, otp);
+        if (emailSent) {
+            console.log("Resend otp", otp)
+            res.status(200).json({ success: true, message: "OTP Resend Successfully" })
+        } else {
+            res.status(500).json({ success: false, message: "Failed to resend OTP.Please try again" })
+        }
+    } catch (error) {
 
-// req.flash('success', 'Send a otp in Your Email');
-// return res.redirect('/user/otp')
+        console.error("Error resending otp", error)
+        res.status(500).json({ success: false, message: "Inernal Server Error. Please try again" })
+
+    }
+}
+
+module.exports = { loadlogin, loadregister, load_Forgot_Password, load_otp, register, login, Verifyotp, resendOTP }
+
