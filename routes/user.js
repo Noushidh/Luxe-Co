@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const usercontroller = require('../controller/usercontroller/user.auth');
-
+const Homecontroller = require('../controller/usercontroller/home.controller')
 router
 .route('/login')
 .get(usercontroller.loadlogin)
@@ -23,5 +23,11 @@ router
 .post(usercontroller.Verifyotp)
 
 router.post('/user/resend-otp',usercontroller.resendOTP)
+
+router.get('/page-404',usercontroller.page_404)
+router.get('/home',Homecontroller.HomePage_load)
+router.get('/about',Homecontroller.AboutPage_load)
+router.get('/shop',Homecontroller.ShopPage_load)
+router.get('/contact',Homecontroller.ContactPage_load)
 module.exports=router;
 

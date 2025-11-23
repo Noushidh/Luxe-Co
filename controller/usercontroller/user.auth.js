@@ -17,6 +17,12 @@ const load_Forgot_Password = (req, res) => {
 const load_otp = (req, res) => {
     res.render('user/otp')
 }
+const page_404 = (req,res)=>{
+   res.render("user/layout",{
+    title:"Page Not Found",
+    body:"user/page-404"
+   });
+}
 const register = async (req, res, next) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
@@ -152,5 +158,5 @@ const resendOTP = async (req, res) => {
     }
 }
 
-module.exports = { loadlogin, loadregister, load_Forgot_Password, load_otp, register, login, Verifyotp, resendOTP }
+module.exports = { loadlogin, loadregister, load_Forgot_Password, load_otp, register, login, Verifyotp, resendOTP ,page_404}
 
