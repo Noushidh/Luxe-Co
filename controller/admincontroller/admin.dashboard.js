@@ -1,12 +1,8 @@
-const admin = require("../../models/adminmodel");
+import admin from "../../models/adminmodel.js";
 
-
-const load_dashboard = (req, res) => {
-    res.render('admin/layout', {
-        title: "Dashboard",
-        body: './dashboard'
-    });
-}
-
-
-module.exports = {load_dashboard}
+export const load_dashboard = (req, res) => {
+  res.render("admin/layout", {
+    title: "Dashboard",
+    body: "./dashboard",
+  });
+};

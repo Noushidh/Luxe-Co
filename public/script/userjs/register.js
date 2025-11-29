@@ -17,20 +17,6 @@ window.togglePassword=function togglePassword(button) {
     svgPath.setAttribute('d', eye); // Show eye
   }
 }
-
-        /**
-         * Placeholder function for the Google Login Button
-         */
-        function handleGoogleLogin() {
-            console.log('Google login clicked!');
-            const messageBox = document.createElement('div');
-            messageBox.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #c8a97e; color: white; padding: 10px 20px; border-radius: 8px; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1);';
-            messageBox.textContent = 'Initiating Google sign-up process...';
-            document.body.appendChild(messageBox);
-            setTimeout(() => messageBox.remove(), 3000);
-        }
-
-
     import { validateEmail,validatePassword,showError,clearError,PasswordMatch} from "/utils/validation.js"
   document.addEventListener("DOMContentLoaded", function () {
   const RegisterForm = document.getElementById("RegisterForm");

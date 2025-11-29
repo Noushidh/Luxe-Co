@@ -1,6 +1,6 @@
 
-const UserModel = require('../../models/usermodel');
-const load_customers = async (req, res) => {
+import UserModel from "../../models/usermodel.js";
+export const load_customers = async (req, res) => {
   try {
     const users = await UserModel.find({})
     res.render('admin/layout', {
@@ -14,4 +14,3 @@ const load_customers = async (req, res) => {
   }
 }
 
-module.exports = { load_customers }

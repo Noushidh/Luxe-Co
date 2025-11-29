@@ -36,7 +36,21 @@ import { validateEmail,validatePassword,showError,clearError} from "/utils/valid
       e.preventDefault();
     }
   });
+  //show success in reset message
+      const params = new URLSearchParams(window.location.search);
+    if (params.get("reset") === "success") {
+      const message = params.get("msg")||"Password reset Successfull";
+
+        const notyf = new Notyf({
+            position: { x: 'right', y: 'top' },
+            duration: 3000,
+        });
+        notyf.success(message)
+     //while refreshing the msg is not showing
+       window.history.replaceState({}, document.title, window.location.pathname);
+    }
 });
+
 
 
 

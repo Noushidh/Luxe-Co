@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
     <style>
-.disabled-resend {
-    pointer-events: none;
-    opacity: 0.4;
-}
-.enabled-resend {
-    pointer-events: auto;
-    opacity: 1;
-}
-</style>
+        .disabled-resend {
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .enabled-resend {
+            pointer-events: auto;
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -87,7 +88,7 @@
 
                                     <div class="paragraph-2">
                                         <div class="text-wrapper-7">Didn't receive the code?</div>
-                                        <div class="container-9 disabled-resend" id="resendBtn" onclick="resendOTP(event)">
+                                        <div class="container-9 disabled-resend" id="resendBtn">
                                             <div class="text-wrapper-8">Resend Code</div>
                                         </div>
                                     </div>
@@ -98,83 +99,9 @@
                 </div>
             </div>
 </body>
-
+<script>
+let backendExpireTime = Number("<%= otpExpires %>");
+</script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/script/userjs/otp.js"></script>
-
-<script>
-    const countdown = document.getElementById("countdown")
-    const resendBtn = document.getElementById("resendBtn")
-
-    let timeLeft = 10;
-    let timer = null;
-    startTimer();
-
-    function startTimer() {
-        timeLeft = 10;
-        countdown.textContent = timeLeft;
-       
-        resendBtn.classList.add("disabled-resend");
-        resendBtn.classList.remove("enabled-resend");
-
-        let timer = setInterval(() => {
-            timeLeft--;
-            countdown.textContent = timeLeft;
-
-            if (timeLeft <= 0) {
-                clearInterval(timer);
-                countdown.textContent = "0";
-                resendBtn.classList.remove("disabled-resend");
-                resendBtn.classList.add("enabled-resend");
-                notyf.error("OTP expired. Click Resend Code.");
-            }
-        }, 1000)
-
-    }
-    
-
-
-    function verifyOTP(event) {
-        event.preventDefault();
-        let otp = "";
-        for (let i = 1; i <= 6; i++) {
-            otp += document.getElementById("otp-" + i).value;
-        }
-
-        axios.post("/user/otp", { otp })
-            .then((response) => {
-                if (response.data.success) {
-                    notyf.success("OTP Verified Successfully");
-                    setTimeout(() => {
-                        window.location.href = response.data.redirect;
-                    }, 1500);
-                } else {
-                    notyf.error(response.data.message);
-                }
-            })
-            .catch(() => {
-                notyf.error("Invalid OTP. Please try again");
-            });
-    }
-
-  function resendOTP(event){
-    if (resendBtn.classList.contains("disabled-resend")) return;
-
-    event.preventDefault()
-
-    axios.post("/user/resend-otp")
-    .then((response)=>{
-        if(response.data.success){
-            notyf.success("New OTP Sent to your email");
-            startTimer();
-        }else{
-            notyf.error(response.data.message)
-        }
-    })
-    .catch(()=>{
-        notyf.error("Error Sending OTP")
-    })
-  }
-</script>
-
 </html>

@@ -1,12 +1,11 @@
+import Admin from "../../models/adminmodel.js";
+import bcrypt from "bcryptjs";
 
-const Admin = require("../../models/adminmodel");
-const bcrypt = require("bcryptjs")
-
-const loadlogin = (req, res) => {
+export const loadlogin = (req, res) => {
     res.render('admin/login');
 }
 
-const login = async (req, res, next) => {
+export const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
@@ -27,7 +26,7 @@ const login = async (req, res, next) => {
     }
 }
 
-const isLogout = async (req, res, next) => {
+export const isLogout = async (req, res, next) => {
     try {
         req.session.destroy((err) => {
             if (err) return next(err);
@@ -38,5 +37,4 @@ const isLogout = async (req, res, next) => {
         next(err)
     }
 }
-module.exports = { loadlogin, login, isLogout }
 

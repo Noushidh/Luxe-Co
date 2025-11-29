@@ -1,6 +1,5 @@
+import crypto from "crypto";
 
-const crypto = require('crypto');
-
-exports.generateOtp = () =>{
-    return crypto.randomInt(100000,999999).toString();
-}
+export const generateOtp = () => {
+  return crypto.randomInt(100000, 999999).toString();
+};

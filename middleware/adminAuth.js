@@ -1,16 +1,15 @@
 
-const checkSession = (req,res,next)=>{
+export const checkSession = (req,res,next)=>{
     if(req.session.admin){
         next();
     }else{
         res.redirect('/admin/login')
     }
 }
-const isLoggin = (req,res,next)=>{
+export const isLoggin = (req,res,next)=>{
     if(req.session.admin){
         res.redirect('/admin/dashboard')
     }else{
         next();
     }
 }
-module.exports = { checkSession ,isLoggin };
